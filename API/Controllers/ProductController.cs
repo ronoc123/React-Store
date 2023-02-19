@@ -9,9 +9,8 @@ using react_store.Entities;
 
 namespace react_store.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+
+    public class ProductController : BaseApiController
     {
         private readonly ReactStoreContext _context;
       
