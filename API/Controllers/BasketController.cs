@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using react_store.Data;
 using react_store.Entities;
 
+using Microsoft.AspNetCore.Http.Features;
+
 namespace react_store.Controllers
 {
     [ApiController]
@@ -14,13 +16,15 @@ namespace react_store.Controllers
     public class BasketController : BaseApiController
     {
         private readonly ReactStoreContext _context;
+       
         public BasketController(ReactStoreContext context)
         {
+    
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<Basket>> GetBasket()
+        public async Task<ActionResult<BasketDto>> GetBasket()
         {
             var basket = await RetrieveBasket();
             
@@ -28,7 +32,21 @@ namespace react_store.Controllers
             {
                 return NotFound();
             }
-            return basket;
+            return new BasketDto
+            {
+                Id = basket.Id,
+                BuyerId = basket.BuyerId,
+                Items = basket.Items.Select(item => new BasketItemDto
+                {
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    PictureUrl = item.Product.PictureUrl,
+                    Type = item.Product.Type,
+                    Brand = item.Product.Brand,
+                    Quantity = item.Quantity
+                }).ToList()
+            };
         }
 
         [HttpPost]
