@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace react_store.Entities
 {
+
     public class BasketItem
     {
         public int Id { get; set; }
@@ -17,6 +18,7 @@ namespace react_store.Entities
         public Product Product {get; set;}
 
         public int BasketId { get; set; }
+
         public Basket Basket {get; set;}
         
     }
