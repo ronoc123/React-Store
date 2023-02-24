@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using react_store.Data;
 using react_store.Entities;
+using react_store.Extensions;
 
 namespace react_store.Controllers
 {
@@ -21,11 +22,15 @@ namespace react_store.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAllProduct()
+        public async Task<ActionResult<List<Product>>> GetAllProduct(string orderBy, string searchTerm, string brands, string types)
         {
-            var products = await _context.Products.ToListAsync();
+            var query =  _context.Products
+                .Sort(orderBy)
+                .Search(searchTerm)
+                .Filter(brands, types)
+                .AsQueryable();
 
-            return Ok(products);
+            return await query.ToListAsync();
         }
 
         [HttpGet("{id}")]
